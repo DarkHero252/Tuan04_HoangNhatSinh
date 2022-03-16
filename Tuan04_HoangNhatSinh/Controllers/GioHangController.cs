@@ -124,5 +124,6 @@ namespace Tuan04_HoangNhatSinh.Controllers
             lstGiohang.Clear();
             return RedirectToAction("Giohang");
         }
+        //test
     }
 }
