@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Windows;
 using Tuan04_HoangNhatSinh.Models;
 
 namespace Tuan04_HoangNhatSinh.Controllers
@@ -30,18 +31,27 @@ namespace Tuan04_HoangNhatSinh.Controllers
 
         public ActionResult ThemGioHang(int id, string strURL)
         {
-            List<Giohang> LstGiohang = Laygiohang();
-            Giohang sanpham = LstGiohang.Find(n => n.masach == id);
+            List<Giohang> lstGioHang = Laygiohang();
+            var sach = data.Saches.FirstOrDefault(p => p.masach == id);
+            Giohang sanpham = lstGioHang.Find(p => p.masach == id);
             if (sanpham == null)
             {
                 sanpham = new Giohang(id);
-                LstGiohang.Add(sanpham);
+                lstGioHang.Add(sanpham);
                 return Redirect(strURL);
             }
             else
             {
-                sanpham.iSoluong++;
-                return Redirect(strURL);
+                if (sanpham.iSoluong < sach.soluongton)
+                {
+                    sanpham.iSoluong++;
+                    return Redirect(strURL);
+                }
+                else
+                {
+                    MessageBox.Show("Không có đủ sách đẻ bán");
+                    return RedirectToAction("Index", "Home");
+                }
             }
         }
 
@@ -99,7 +109,7 @@ namespace Tuan04_HoangNhatSinh.Controllers
         {
             List<Giohang> lstGiohang = Laygiohang();
             Giohang sanpham = lstGiohang.SingleOrDefault(n => n.masach == id);
-            if(sanpham != null)
+            if (sanpham != null)
             {
                 lstGiohang.RemoveAll(n => n.masach == id);
                 return RedirectToAction("Giohang");
@@ -110,10 +120,16 @@ namespace Tuan04_HoangNhatSinh.Controllers
         public ActionResult CapNhapGioHang(int id, FormCollection collection)
         {
             List<Giohang> listGioHang = Laygiohang();
+            var sach = data.Saches.FirstOrDefault(p => p.masach == id);
             Giohang sanpham = listGioHang.SingleOrDefault(n => n.masach == id);
             if (sanpham != null)
             {
-                sanpham.iSoluong = int.Parse(collection["txtSoLg"].ToString());
+                sanpham.iSoluong = int.Parse(collection["txtSoLg"].ToString().Trim());
+                if (sanpham.iSoluong > sach.soluongton)
+                {
+                    MessageBox.Show("Không còn đủ sách để bán");
+                    sanpham.iSoluong = 1;
+                }
             }
             return RedirectToAction("GioHang");
         }
@@ -124,6 +140,29 @@ namespace Tuan04_HoangNhatSinh.Controllers
             lstGiohang.Clear();
             return RedirectToAction("Giohang");
         }
-        //ahahaha
+
+        public ActionResult DatHang()
+        {
+            List<Giohang> listGioHang = Laygiohang();
+            var temp = listGioHang;
+
+            foreach (var item in temp)
+            {
+                var change = data.Saches.Where(x => x.masach == item.masach).FirstOrDefault();
+                if (change != null)
+                {
+                    if (change.soluongton >= item.iSoluong)
+                    {
+                        var tempsl = change.soluongton - item.iSoluong;
+                        change.soluongton = tempsl;
+                        UpdateModel(change);
+                        data.SubmitChanges();
+
+                    }
+                }
+            }
+            return View(listGioHang);
+            listGioHang.Clear();
+        }
     }
 }

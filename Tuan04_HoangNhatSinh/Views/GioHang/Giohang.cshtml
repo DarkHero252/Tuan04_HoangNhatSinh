@@ -37,7 +37,7 @@
             @using (Html.BeginForm("CapNhapGioHang", "GioHang", new { @id = item.masach }))
             {
                 <td>@String.Format("{0:0,0}", item.giaban) VND</td>
-                <td> <input type="number" min="1" max="" name="txtSoLg" value="@item.iSoluong" /></td>
+                <td> <input type="number" min="1" max="100" name="txtSoLg" value="@item.iSoluong" /></td>
                 <td>@Html.DisplayFor(modelItem => item.dthanhtien)</td>
                 <td>
                     <a href="@Url.Action("Detail","Sach",new { @id = item.masach })">Chi tiết</a> |

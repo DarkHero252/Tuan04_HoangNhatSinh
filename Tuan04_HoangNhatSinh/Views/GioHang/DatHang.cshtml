@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Tuan04_HoangNhatSinh.Models.Giohang>
+
+@{
+    ViewBag.Title = "GioHang";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Cảm ơn bạn đã mua hàng</h1>
+<h2>Hóa đơn</h2>
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.tensach)</th>
+        <th>@Html.DisplayNameFor(model => model.hinh)</th>
+        <th>@Html.DisplayNameFor(model => model.giaban)</th>
+        <th>@Html.DisplayNameFor(model => model.iSoluong)</th>
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.tensach)</td>
+            <td><img src="@item.hinh" width="180" /></td>
+            @using (Html.BeginForm("Capnhatgiohang", "Giohang", new { @id = item.masach }))
+            {
+                <td>@String.Format("{0:0,0}", item.giaban) VND</td>
+
+                <td>@Html.DisplayFor(modelItem => item.iSoluong)</td>
+            }
+        </tr>
+    }
+
+
+
+</table>
