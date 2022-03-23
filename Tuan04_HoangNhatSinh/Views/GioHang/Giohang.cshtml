@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<Tuan04_HoangNhatSinh.Models.Giohang>
- 
+
 
 @{
     ViewBag.Title = "Giohang";
@@ -48,7 +48,7 @@
         </tr>
     }
     <tr style="font-weight:bold; text-align:left; color:red">
-        <td colspan="2"> Số loại sách: @ViewBag.Tongsoluongsanpham </td>
+        <td colspan="2"> Số loại sách: @ViewBag.TongSoluongSanPham </td>
         <td colspan="2"> Số lượng sách: @ViewBag.Tongsoluong </td>
         <td colspan="4">Số tiền: @String.Format("{0:0,0}", @ViewBag.Tongtien) VND </td>
     </tr>
@@ -60,8 +60,9 @@
     </tr>
     <tr style="font-weight:bold; color:yellow; text-align:right">
         <td colspan="5">
-            @Html.ActionLink("Đặt hàng", "Dathang", "Giohang")
+            @Html.ActionLink("Đặt hàng", "DatHang", "Giohang")
         </td>
     </tr>
 
 </table>
+
